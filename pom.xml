@@ -9,6 +9,12 @@
     <version>0.1-dev</version>
 
     <dependencies>
+        <!-- slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.32</version>
+        </dependency>
         <!-- junit -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -66,13 +72,6 @@
             <scope>test</scope>
         </dependency>
         <!-- log -->
-        <!-- slf4j -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.32</version>
-            <scope>test</scope>
-        </dependency>
         <!-- logback -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
