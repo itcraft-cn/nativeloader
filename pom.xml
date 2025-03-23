@@ -6,7 +6,7 @@
 
     <groupId>cn.itcraft</groupId>
     <artifactId>nativeloader</artifactId>
-    <version>0.1</version>
+    <version>0.2-dev</version>
 
     <name>frogspawn</name>
     <description>A very simple lib, to load dynamic jni lib.</description>
