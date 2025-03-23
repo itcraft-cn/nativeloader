@@ -7,6 +7,8 @@ import static cn.itcraft.nativeloader.NativeLoader.EXT;
 import static cn.itcraft.nativeloader.NativeLoader.LIB_DEF;
 
 /**
+ * 简易实现
+ * 
  * @author Helly Guo
  * <p>
  * Created on 11/16/23 10:23 PM
