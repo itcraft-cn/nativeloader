@@ -13,6 +13,7 @@ import java.nio.file.StandardCopyOption;
 /**
  * learn from <a href="https://www.cnblogs.com/FlyingPuPu/p/7598098.html">load from jar</a><br>
  * 加载原生库
+ * Native library loader with multi-source support (system path/JAR file/custom path)
  *
  * @author Helly Guo
  * <p>
@@ -20,20 +21,21 @@ import java.nio.file.StandardCopyOption;
  */
 public class NativeLoader {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(NativeLoader.class);
-
     /**
      * identify native library by system, may be need "os.arch"
+     * System properties for platform detection
      */
     static final String OS_NAME = System.getProperty("os.name");
-    static final String EXT = (OS_NAME.toLowerCase().contains("win")) ? ".dll" : ".so";
-    static final String LIB_DEF = "ENV_LIB_PARAM_NOT_EXIST";
-    private static final String TMP_DIR = System.getProperty("java.io.tmpdir");
+    static final String EXT = (OS_NAME.toLowerCase().contains("win")) ? ".dll" : ".so";  // File extension based on OS
+    static final String LIB_DEF = "ENV_LIB_PARAM_NOT_EXIST";  // Default marker for undefined library path
+    private static final Logger LOGGER = LoggerFactory.getLogger(NativeLoader.class);
+    private static final String TMP_DIR = System.getProperty("java.io.tmpdir");  // System temp directory
 
     /**
      * 加载库
-     * 
-     * @param libInfo 库信息
+     * Load native library with fallback strategies
+     *
+     * @param libInfo 库信息 - Library metadata container
      */
     public static void load(LibInfo libInfo) {
         String name = libInfo.name();
@@ -48,11 +50,11 @@ public class NativeLoader {
 
     /**
      * 基于系统环境变量加载
-     * 
-     * @param name 全名
-     * @param shortName 短名
-     * @return 成功/失败
-     * 
+     * Try loading from system library path (java.library.path)
+     *
+     * @param name      全名 - Full library name with extension
+     * @param shortName 短名 - Library base name without prefix/extension
+     * @return 成功/失败 - Whether loading succeeded
      */
     private static boolean loadFromSysLibPath(String name, String shortName) {
         LOGGER.debug("try load native library[{}] from sys lib path", name);
@@ -67,22 +69,28 @@ public class NativeLoader {
 
     /**
      * 从jar加载
-     * @param jarPath jar路径
-     * @param prefix 文件名，不带后缀
-     * @return 成功/失败
+     * Extract and load library from JAR resources
+     *
+     * @param jarPath jar路径 - Resource path in JAR file
+     * @param prefix  文件名，不带后缀 - Filename prefix without extension
+     * @return 成功/失败 - Whether extraction and loading succeeded
      */
     private static boolean loadFromJar(String name, String jarPath, String prefix) {
         LOGGER.debug("try load native library[{}] from classpath", jarPath);
-        try (InputStream is
-                     = Thread.currentThread().getContextClassLoader().getResourceAsStream(jarPath)) {
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(jarPath)) {
             if (is == null) {
                 LOGGER.warn("try load lib[{}] in jar failed, {} is not found in classpath", name, jarPath);
                 return false;
             }
+            // Create temp file with proper naming
             Path tmpDir = Paths.get(TMP_DIR);
             Path tmpLib = Files.createTempFile(tmpDir, prefix, EXT);
-            tmpLib.toFile().deleteOnExit();
+            tmpLib.toFile().deleteOnExit();  // Ensure cleanup on JVM exit
+
+            // Copy resource to temp file
             Files.copy(is, tmpLib, StandardCopyOption.REPLACE_EXISTING);
+
+            // Load from temp path
             System.load(tmpLib.toAbsolutePath().toString());
             return true;
         } catch (UnsatisfiedLinkError | IOException thrown) {
@@ -93,9 +101,11 @@ public class NativeLoader {
 
     /**
      * 基于JVM特定配置加载
-     * @param name 文件名
-     * @param filePath 文件路径
-     * @return 成功/失败
+     * Load from filesystem path specified in system properties
+     *
+     * @param name     文件名 - Library filename for logging
+     * @param filePath 文件路径 - Absolute filesystem path
+     * @return 成功/失败 - Whether loading from custom path succeeded
      */
     private static boolean loadFromSysProperties(String name, String filePath) {
         if (LIB_DEF.equals(filePath)) {
