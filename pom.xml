@@ -6,7 +6,7 @@
 
     <groupId>cn.itcraft</groupId>
     <artifactId>nativeloader</artifactId>
-    <version>0.2-dev</version>
+    <version>0.2</version>
 
     <name>nativeloader</name>
     <description>A very simple lib, to load dynamic jni lib.</description>
