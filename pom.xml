@@ -8,7 +8,7 @@
     <artifactId>nativeloader</artifactId>
     <version>0.2-dev</version>
 
-    <name>frogspawn</name>
+    <name>nativeloader</name>
     <description>A very simple lib, to load dynamic jni lib.</description>
     <url>https://itcraft.cn/nativeloader/</url>
 
