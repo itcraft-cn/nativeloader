@@ -1,10 +1,12 @@
 # nativeloader
 
-a simple native loader for java
+一个简单的本地库加载器，用于加载本地库。
+
+[English Document](README.md)
 
 ## usage 1
 
-use `SimpleLibInfo`
+使用 `SimpleLibInfo`
 
 ```java
 try {
@@ -15,15 +17,15 @@ try {
 }
 ```
 
-the `NativeLoader` will try to:
+`NativeLoader` 将尝试：
 
-1. try to load the library from the system path
-2. try to load the library from the classpath, and copy it to the tmp directory
-3. try to load the library from given path by set in java env
+1. 尝试从系统路径加载库
+2. 尝试从类路径加载库，并复制到临时目录
+3. 尝试从给定路径(经过设置java环境)加载库
 
 ## usage 2
 
-implement `LibInfo`
+实现 `LibInfo`
 
 ```java
 public class LibAInfo implements LibInfo {
