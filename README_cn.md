@@ -42,3 +42,7 @@ try{
     throw e;
 }
 ```
+
+## 变更记录
+
+[变更记录](CHANGELOG_cn.md)

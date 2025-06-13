@@ -42,3 +42,7 @@ try{
     throw e;
 }
 ```
+
+## ChangeLog
+
+[ChangeLog](CHANGELOG.md)
