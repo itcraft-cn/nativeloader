@@ -9,6 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * learn from <a href="https://www.cnblogs.com/FlyingPuPu/p/7598098.html">load from jar</a><br>
@@ -26,10 +28,16 @@ public class NativeLoader {
      * System properties for platform detection
      */
     static final String OS_NAME = System.getProperty("os.name");
-    static final String EXT = (OS_NAME.toLowerCase().contains("win")) ? ".dll" : ".so";  // File extension based on OS
-    static final String LIB_DEF = "ENV_LIB_PARAM_NOT_EXIST";  // Default marker for undefined library path
+    // File extension based on OS
+    static final String EXT = (OS_NAME.toLowerCase().contains("win")) ? ".dll" : ".so";
+    // Default marker for undefined library path
+    static final String LIB_DEF = "ENV_LIB_PARAM_NOT_EXIST";
+    // System temp directory
+    private static final String TMP_DIR = System.getProperty("java.io.tmpdir");
+
     private static final Logger LOGGER = LoggerFactory.getLogger(NativeLoader.class);
-    private static final String TMP_DIR = System.getProperty("java.io.tmpdir");  // System temp directory
+
+    private static final Set<String> LIB_LOADED_SET = new ConcurrentSkipListSet<>();
 
     /**
      * 加载库
@@ -38,6 +46,18 @@ public class NativeLoader {
      * @param libInfo 库信息 - Library metadata container
      */
     public static void load(LibInfo libInfo) {
+        String name = libInfo.name();
+        synchronized (LIB_LOADED_SET) {
+            if (LIB_LOADED_SET.contains(name)) {
+                LOGGER.debug("native library[{}] already loaded", name);
+                return;
+            }
+            load0(libInfo);
+            LIB_LOADED_SET.add(name);
+        }
+    }
+
+    private static void load0(LibInfo libInfo) {
         String name = libInfo.name();
         if (loadFromSysLibPath(name, libInfo.shortName())
                 || loadFromJar(name, libInfo.jarPath(), libInfo.prefix())
