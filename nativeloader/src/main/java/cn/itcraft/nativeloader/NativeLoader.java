@@ -28,8 +28,9 @@ public class NativeLoader {
      * System properties for platform detection
      */
     static final String OS_NAME = System.getProperty("os.name");
+    static final boolean OS_IS_WIN = (OS_NAME.toLowerCase().contains("win"));
     // File extension based on OS
-    static final String EXT = (OS_NAME.toLowerCase().contains("win")) ? ".dll" : ".so";
+    static final String EXT = OS_IS_WIN ? ".dll" : ".so";
     // Default marker for undefined library path
     static final String LIB_DEF = "ENV_LIB_PARAM_NOT_EXIST";
     // System temp directory

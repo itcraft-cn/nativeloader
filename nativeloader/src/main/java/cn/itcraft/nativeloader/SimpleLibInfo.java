@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static cn.itcraft.nativeloader.NativeLoader.EXT;
 import static cn.itcraft.nativeloader.NativeLoader.LIB_DEF;
+import static cn.itcraft.nativeloader.NativeLoader.OS_IS_WIN;
 
 /**
  * 简易实现
@@ -40,9 +41,13 @@ public final class SimpleLibInfo implements LibInfo {
         // Follow common library naming convention
         this.prefix = "lib" + shortName;
         // Append platform-specific extension
-        this.name = prefix + EXT;
+        if (OS_IS_WIN) {
+            this.name = this.shortName + EXT;
+        } else {
+            this.name = this.prefix + EXT;
+        }
         // Default location in JAR resources
-        this.inJarPath = "resources/" + name;
+        this.inJarPath = "resources/" + this.name;
         // Get custom path from system property
         this.libFilePath = getPropertyByName(shortName);
     }
@@ -55,10 +60,10 @@ public final class SimpleLibInfo implements LibInfo {
      * @return 属性值或默认值 - Property value or LIB_DEF if not set
      */
     private static String getPropertyByName(String name) {
-        return LIB_NAME_MAP.computeIfAbsent(name,
-                                            // Property naming convention: [shortName]Lib
-                                            n -> System.getProperty(n + "Lib", LIB_DEF)
-                                           );
+        return LIB_NAME_MAP.computeIfAbsent(
+                name,
+                // Property naming convention: [shortName]Lib
+                n -> System.getProperty(n + "Lib", LIB_DEF));
     }
 
     /**
