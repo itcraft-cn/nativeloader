@@ -1,5 +1,9 @@
 # 变更记录
 
+## v0.6
+
+摘除parent pom
+
 ## v0.5
 
 windows下仅使用shortName

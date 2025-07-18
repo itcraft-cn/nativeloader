@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v0.6
+
+change to indepenent proj, without parent pom
+
 ## v0.5
 
 shortName+ext, under windows
