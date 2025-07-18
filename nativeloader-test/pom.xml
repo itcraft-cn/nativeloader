@@ -6,7 +6,7 @@
 
     <groupId>cn.itcraft</groupId>
     <artifactId>nativeloader-test</artifactId>
-    <version>0.5</version>
+    <version>0.6</version>
 
     <name>nativeloader-test</name>
     <description>A very simple lib, to load dynamic jni lib.</description>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>cn.itcraft</groupId>
             <artifactId>nativeloader</artifactId>
-            <version>0.5</version>
+            <version>0.6</version>
         </dependency>
         <!-- log -->
         <!-- slf4j -->
