@@ -1,5 +1,9 @@
 # ChangeLog
 
+## v0.5
+
+shortName+ext, under windows
+
 ## v0.4
 
 ignore to load the lib which is already loaded
