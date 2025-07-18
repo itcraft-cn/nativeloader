@@ -7,11 +7,11 @@
     <parent>
         <groupId>cn.itcraft</groupId>
         <artifactId>nativeloader-parent</artifactId>
-        <version>0.5-dev</version>
+        <version>0.5</version>
     </parent>
 
     <artifactId>nativeloader-test</artifactId>
-    <version>0.5-dev</version>
+    <version>0.5</version>
 
     <name>nativeloader-test</name>
     <description>A very simple lib, to load dynamic jni lib.</description>
@@ -41,7 +41,7 @@
         <dependency>
             <groupId>cn.itcraft</groupId>
             <artifactId>nativeloader</artifactId>
-            <version>0.5-dev</version>
+            <version>0.5</version>
         </dependency>
         <!-- log -->
         <!-- slf4j -->
